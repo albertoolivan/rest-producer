@@ -19,15 +19,16 @@ public class CityDistance {
 
 	private City cityDestination = null;
 
-	private long distanceKm;
+	private int distanceKm;
 
 	public CityDistance() {
 	}
 
-	public CityDistance(String id, City cityOrigin, City cityDestination, long distanceKm) {
+	public CityDistance(String id, City cityOrigin, City cityDestination, int distanceKm) {
 		this.id = id;
 		this.cityOrigin = cityOrigin;
 		this.cityDestination = cityDestination;
+		this.distanceKm = distanceKm;
 	}
 
 	@Id
@@ -61,11 +62,11 @@ public class CityDistance {
 	}
 
 	@Column(name = "distance_km", nullable = false)
-	public long getDistanceKm() {
+	public int getDistanceKm() {
 		return distanceKm;
 	}
 
-	public void setDistanceKm(long distanceKm) {
+	public void setDistanceKm(int distanceKm) {
 		this.distanceKm = distanceKm;
 	}
 

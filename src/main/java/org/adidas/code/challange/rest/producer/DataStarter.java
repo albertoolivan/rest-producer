@@ -64,7 +64,7 @@ public class DataStarter implements CommandLineRunner {
 				String cityOriginId = line.get(1);
 				String cityDestinationId = line.get(2);
 				String distanceKmString = line.get(3);
-				long distanceKm = Integer.parseInt(distanceKmString);
+				int distanceKm = Integer.parseInt(distanceKmString);
 				City cityOrigin = mapCityLoaded.get(cityOriginId);
 				City cityDestination = mapCityLoaded.get(cityDestinationId);
 				if (cityOrigin != null && cityDestination != null) {
