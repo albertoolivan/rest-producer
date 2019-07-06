@@ -27,7 +27,7 @@ public class CityDistanceController {
 		/**
 		 * GET /city-distance/{id}
 		 * 
-		 * Example:	http://localhost:8080/city-distance?cityOriginId=MAD
+		 * Example:	http://localhost:8098/city-distance?cityOriginId=MAD
 		 * 
 		 * Get CityDistance list with cityOriginId
 		 * 

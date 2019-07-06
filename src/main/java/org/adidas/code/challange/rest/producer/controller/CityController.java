@@ -25,16 +25,16 @@ public class CityController {
 	private CityService cityService;
 
 	/**
-	 * GET /city/{id}
+	 * GET /city/info/{id}
 	 * 
-	 * Example: http://localhost:8080/city/MAD
+	 * Example: http://localhost:8098/city/info/MAD
 	 * 
 	 * Get City info
 	 * 
 	 * @param id
 	 * @return City
 	 */
-	@RequestMapping(value = "/city/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/city/info/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getCityInfo(@PathVariable String id) {
 		try {
 			logger.info("Rest getCityInfo() called with id {}", id);
@@ -58,7 +58,7 @@ public class CityController {
 	 * GET /city/itinerary_short
 	 * 
 	 * Example:
-	 * http://localhost:8080/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
+	 * http://localhost:8098/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
 	 * 
 	 * Get IntineraryDTO info
 	 * 
