@@ -1,8 +1,8 @@
 package org.adidas.code.challange.rest.producer.controller;
 
 import org.adidas.code.challange.rest.dto.CityDTO;
+import org.adidas.code.challange.rest.dto.ExceptionResponseDTO;
 import org.adidas.code.challange.rest.dto.IntineraryDTO;
-import org.adidas.code.challange.rest.producer.exception.ExceptionResponseDTO;
 import org.adidas.code.challange.rest.producer.service.CityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,10 +60,11 @@ public class CityController {
 	 * Example:
 	 * http://localhost:8080/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
 	 * 
-	 * Get City info
+	 * Get IntineraryDTO info
 	 * 
-	 * @param id
-	 * @return City
+	 * @param cityOriginId
+	 * @param cityDestinationId
+	 * @return IntineraryDTO
 	 */
 	@RequestMapping(value = "/city/itinerary_short", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> initneraryShort(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.adidas.code.challange.rest.dto.CityDTO;
+import org.adidas.code.challange.rest.dto.ExceptionResponseDTO;
 import org.adidas.code.challange.rest.dto.IntineraryDTO;
 import org.adidas.code.challange.rest.producer.entities.City;
 import org.adidas.code.challange.rest.producer.entities.CityDistance;
-import org.adidas.code.challange.rest.producer.exception.ExceptionResponseDTO;
 import org.adidas.code.challange.rest.producer.graph.DijkstraAlgorithm;
 import org.adidas.code.challange.rest.producer.graph.Vertex;
 import org.adidas.code.challange.rest.producer.repositories.CityDistanceRepository;
@@ -70,6 +70,7 @@ public class CityService {
 		}
 		intineraryDTO.setPath(pathDTO);
 		intineraryDTO.setSumPathWeight(sumPathWeight);
+		intineraryDTO.setMessage("Itinerary found successfull.");
 
 		return intineraryDTO;
 	}
