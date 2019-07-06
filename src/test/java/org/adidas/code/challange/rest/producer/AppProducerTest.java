@@ -56,7 +56,7 @@ public class AppProducerTest {
         // registration has to take place...
         Thread.sleep(3000);
 
-        ResponseEntity<String> response = this.testRestTemplate.getForEntity("http://localhost:" + this.port + "/service-instances/a-bootiful-client", String.class);
+        ResponseEntity<String> response = this.testRestTemplate.getForEntity("http://localhost:" + this.port + "/service-instances/rest-producer", String.class);
 
         then(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         then(response.getBody()).contains("rest-producer");
