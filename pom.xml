@@ -85,7 +85,6 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<!-- <version>Finchley.SR2</version> -->
 				<version>Greenwich.RELEASE</version>
 				<type>pom</type>
 				<scope>import</scope>
@@ -101,7 +100,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-
 
 </project>
