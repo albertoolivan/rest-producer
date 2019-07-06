@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DataStarter implements CommandLineRunner {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(DataStarter.class);
 
 	public static final String COMMA_DELIMITER = ",";
@@ -32,6 +32,11 @@ public class DataStarter implements CommandLineRunner {
 	@Autowired
 	private CityDistanceRepository cityDistanceRepository;
 
+	/**
+	 * Insert data into database from initial files
+	 * 
+	 * resources/city_list.txt resources/ city_distance_list.txt
+	 */
 	@Override
 	public void run(String... args) throws Exception {
 
@@ -82,7 +87,16 @@ public class DataStarter implements CommandLineRunner {
 		}
 		logger.info("Distances inserted " + countDistancesInserted + " of " + countDistanceLines + " lines ");
 	}
-	
+
+	/**
+	 * Read a comma separator file and return each line/element into
+	 * List<List<String>>
+	 * 
+	 * Ignore lines starting with # and clean quotes
+	 * 
+	 * @param fileName
+	 * @return List<List<String>>
+	 */
 	private List<List<String>> readFile(String fileName) {
 		List<List<String>> records = new ArrayList<>();
 		ClassLoader classLoader = getClass().getClassLoader();

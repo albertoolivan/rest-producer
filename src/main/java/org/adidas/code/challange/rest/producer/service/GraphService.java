@@ -25,6 +25,11 @@ public class GraphService {
 	@Autowired
 	CityDistanceRepository cityDistanceRepository;
 
+	/**
+	 * Get Graph from database (City and CityDistance). Used by DijkstraAlgorithm. 
+	 * 
+	 * @return Graph
+	 */
 	public Graph getGraph() {
 		if (graph != null) {
 			return graph;

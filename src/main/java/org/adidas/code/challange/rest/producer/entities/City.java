@@ -16,10 +16,11 @@ import javax.persistence.Table;
 @Table(name = "ch_city")
 public class City {
 
+	// city id: MAD
 	private String id;
-
+	// city name: Madrid
 	private String name;
-
+	// list of paths reachable from city
 	private List<CityDistance> distanceList = new ArrayList<>();
 
 	public City() {

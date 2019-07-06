@@ -3,6 +3,12 @@ package org.adidas.code.challange.rest.producer.graph;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class used to test DijkstraAlgorithm
+ * 
+ * @author Alberto
+ *
+ */
 public class GraphUtil {
 	
 	public static Graph getGraphReal() {

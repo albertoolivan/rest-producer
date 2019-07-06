@@ -13,12 +13,13 @@ import javax.persistence.Table;
 @Table(name = "ch_distance")
 public class CityDistance {
 
+	// id
 	private String id;
-
+	// city origin, example: MAD
 	private City cityOrigin = null;
-
+	// city destination, example BER
 	private City cityDestination = null;
-
+	// distance in kilometers between cities
 	private int distanceKm;
 
 	public CityDistance() {

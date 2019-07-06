@@ -9,7 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
+ * 
+ * Dijkstra algorithm, from a graph of vertexes and edges, find short path. 
  * 
  * https://www.vogella.com/tutorials/JavaAlgorithmsDijkstra/article.html
  * 
@@ -17,6 +22,8 @@ import java.util.Set;
  *
  */
 public class DijkstraAlgorithm {
+	
+	private static Logger logger = LoggerFactory.getLogger(DijkstraAlgorithm.class);
 
 	private final List<Vertex> nodes;
 	private final List<Edge> edges;
@@ -40,7 +47,7 @@ public class DijkstraAlgorithm {
 		unSettledNodes.add(source);
 		while (unSettledNodes.size() > 0) {
 			Vertex node = getMinimum(unSettledNodes);
-			System.out.println("execute(" + node + ") size " + unSettledNodes.size());
+			logger.debug("execute(" + node + ") size " + unSettledNodes.size());
 			settledNodes.add(node);
 			unSettledNodes.remove(node);
 			findMinimalDistances(node);
@@ -49,10 +56,10 @@ public class DijkstraAlgorithm {
 
 	private void findMinimalDistances(Vertex node) {
 		List<Vertex> adjacentNodes = getNeighbors(node);
-		System.out.println("findMinimalDistances(" + node + ") - " + adjacentNodes);
+		logger.info("findMinimalDistances(" + node + ") - " + adjacentNodes);
 		for (Vertex target : adjacentNodes) {
 			if (getShortestDistance(target) > getShortestDistance(node) + getDistance(node, target)) {
-				System.out.println("findMinimalDistances put (" + target + ")");
+				logger.debug("findMinimalDistances put (" + target + ")");
 				distance.put(target, getShortestDistance(node) + getDistance(node, target));
 				predecessors.put(target, node);
 				unSettledNodes.add(target);
@@ -64,7 +71,7 @@ public class DijkstraAlgorithm {
 	private int getDistance(Vertex node, Vertex target) {
 		for (Edge edge : edges) {
 			if (edge.getSource().equals(node) && edge.getDestination().equals(target)) {
-				System.out.println("getDistance " + node + " - " + target + " = " + edge.getWeight());
+				logger.debug("getDistance " + node + " - " + target + " = " + edge.getWeight());
 				return edge.getWeight();
 			}
 		}
@@ -78,7 +85,7 @@ public class DijkstraAlgorithm {
 				neighbors.add(edge.getDestination());
 			}
 		}
-		System.out.println("getNeighbors " + node + " = " + neighbors);
+		logger.info("getNeighbors " + node + " = " + neighbors);
 		return neighbors;
 	}
 
@@ -93,7 +100,7 @@ public class DijkstraAlgorithm {
 				}
 			}
 		}
-		System.out.println("getMinimum " + vertexes + " = " + minimum);
+		logger.info("getMinimum " + vertexes + " = " + minimum);
 		return minimum;
 	}
 
@@ -110,7 +117,7 @@ public class DijkstraAlgorithm {
 		}
 	}
 
-	/*
+	/**
 	 * This method returns the path from the source to the selected target and NULL
 	 * if no path exists
 	 */
@@ -131,27 +138,33 @@ public class DijkstraAlgorithm {
 		return path;
 	}
 	
+	/**
+	 * Sun all distance kilometers of a LinkedList<Vertex>
+	 * 
+	 * @param path
+	 * @return int
+	 */
 	public int sumPathWeight(LinkedList<Vertex> path) {
 		int sumWeight = 0;
 		for (int i = 0; i<path.size()-1; i++) {
 			int weight = 0;
 			Vertex current = path.get(i);
 			Vertex next = path.get(i+1);
-			System.out.println("sumPathWeight i:"+i+" current " + current + " next " + next + " sum " + sumWeight);
+			logger.debug("sumPathWeight i:"+i+" current " + current + " next " + next + " sum " + sumWeight);
 			if (next != null) {
 				for (Edge edge : edges) {
 					if (edge.getSource().equals(current) && edge.getDestination().equals(next)) {
-						System.out.println("Edge used: " + edge.toString());
+						logger.debug("Edge used: " + edge.toString());
 						weight = edge.getWeight();
 					}
 				}
 			} else {
-				System.out.println("step null!");
+				logger.warn("step null!");
 			}
 			
 			sumWeight = sumWeight + weight;
 		}
-		System.out.println("sumPathWeight result: " + sumWeight);
+		logger.info("sumPathWeight result: " + sumWeight);
 		
 		return sumWeight;
 	}

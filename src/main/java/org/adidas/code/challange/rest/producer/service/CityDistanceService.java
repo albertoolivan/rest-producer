@@ -15,14 +15,25 @@ public class CityDistanceService {
 	@Autowired
 	CityDistanceRepository cityDistanceRepository;
 
+	/**
+	 * Find in database a list of CityDistance with cityOriginId.
+	 * Convert into DTOs.
+	 * 
+	 * @param cityDistanceOriginId
+	 * @return List<CityDistanceDTO>
+	 */
 	public List<CityDistanceDTO> getCityDistanceListByOriginId(String cityDistanceOriginId) {
-
 		List<CityDistance> cityDistanceList = cityDistanceRepository.findByCityOriginId(cityDistanceOriginId);
-
 		return convertCityDistanceList(cityDistanceList);
 
 	}
 
+	/**
+	 * Convert a List<CityDistance> into List<CityDistanceDTO>.
+	 * 
+	 * @param cityDistanceList
+	 * @return List<CityDistanceDTO>
+	 */
 	public List<CityDistanceDTO> convertCityDistanceList(List<CityDistance> cityDistanceList) {
 		List<CityDistanceDTO> cityDistanceDTOList = new ArrayList<>();
 		for (CityDistance cityDistance : cityDistanceList) {

@@ -31,6 +31,12 @@ public class CityService {
 	@Autowired
 	CityDistanceService cityDistanceService;
 
+	/**
+	 * Find in database a City from id and return a CityDTO.
+	 * 
+	 * @param id
+	 * @return CityDTO
+	 */
 	public CityDTO getCity(String id) {
 		CityDTO cityDTO = null;
 		Optional<City> cityOptional = cityRepository.findById(id);
@@ -44,6 +50,15 @@ public class CityService {
 		return cityDTO;
 	}
 
+	/**
+	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with short number of kilometers.
+	 * 
+	 * Call DijkstraAlgorithm.
+	 * 
+	 * @param cityOriginId
+	 * @param cityDestinationId
+	 * @return IntineraryDTO
+	 */
 	public IntineraryDTO getItineraryShort(String cityOriginId, String cityDestinationId) {
 		IntineraryDTO intineraryDTO = new IntineraryDTO();
 
