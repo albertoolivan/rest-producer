@@ -1,8 +1,8 @@
 package org.adidas.code.challange.rest.producer.controller;
 
-import org.adidas.code.challange.rest.producer.entities.City;
+import org.adidas.code.challange.rest.dto.CityDTO;
+import org.adidas.code.challange.rest.dto.IntineraryDTO;
 import org.adidas.code.challange.rest.producer.exception.ExceptionResponseDTO;
-import org.adidas.code.challange.rest.producer.graph.IntineraryDTO;
 import org.adidas.code.challange.rest.producer.service.CityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ public class CityController {
 	/**
 	 * GET /city/{id}
 	 * 
-	 * Example:	http://localhost:8080/city/MAD
+	 * Example: http://localhost:8080/city/MAD
 	 * 
 	 * Get City info
 	 * 
@@ -39,25 +39,26 @@ public class CityController {
 		try {
 			logger.info("Rest getCityInfo() called with id {}", id);
 
-			City city = cityService.getCity(id);
+			CityDTO cityDTO = cityService.getCity(id);
 
-			logger.info("Rest getCityInfo() Return {}", city);
-			
-			if (city != null) {
-				return ResponseEntity.ok().body(city);
+			logger.info("Rest getCityInfo() Return {}", cityDTO);
+
+			if (cityDTO != null) {
+				return ResponseEntity.ok().body(cityDTO);
 			} else {
 				return ResponseEntity.notFound().build();
 			}
-			
+
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ExceptionResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	/**
 	 * GET /city/itinerary_short
 	 * 
-	 * Example:	http://localhost:8080/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
+	 * Example:
+	 * http://localhost:8080/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
 	 * 
 	 * Get City info
 	 * 
@@ -70,16 +71,16 @@ public class CityController {
 		try {
 			logger.info("Rest getCityInfo() called with cityOriginId {} cityOriginId {}", cityOriginId, cityOriginId);
 
-			IntineraryDTO result =  cityService.getItineraryShort(cityOriginId, cityDestinationId);
+			IntineraryDTO result = cityService.getItineraryShort(cityOriginId, cityDestinationId);
 
 			logger.info("Rest getCityInfo() Return {}", result);
-			
+
 			if (result != null) {
 				return ResponseEntity.ok().body(result);
 			} else {
 				return ResponseEntity.notFound().build();
 			}
-			
+
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ExceptionResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

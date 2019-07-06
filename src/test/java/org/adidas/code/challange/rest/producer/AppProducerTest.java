@@ -1,10 +1,6 @@
 package org.adidas.code.challange.rest.producer;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import static org.assertj.core.api.BDDAssertions.*;
+import static org.assertj.core.api.BDDAssertions.then;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -22,6 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+//import junit.framework.Test;
+
+import org.junit.Test;
 
 /**
  * @author Marcin Grzejszczak
@@ -51,7 +51,7 @@ public class AppProducerTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
-    //@Test
+    @Test
     public void shouldRegisterClientInEurekaServer() throws InterruptedException {
         // registration has to take place...
         Thread.sleep(3000);
