@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class GraphUtil {
 	
-	public static Graph getGraphReal() {
-		List<Vertex> nodes = new ArrayList<Vertex>();
-		List<Edge> edges = new ArrayList<Edge>();
+	public static Graph getGraphShort() {
+		List<Vertex> nodes = new ArrayList<>();
+		List<Edge> edges = new ArrayList<>();
 
 		Vertex cityMAD = new Vertex("MAD", "Madrid");
 		nodes.add(cityMAD);
@@ -84,14 +84,89 @@ public class GraphUtil {
 		
 
 		// Lets check from location Loc_1 to Loc_10
-		Graph graph = new Graph(nodes, edges);
-		return graph;
+		return new Graph(nodes, edges);
 	}
 
+	public static Graph getGraphLess() {
+		List<Vertex> nodes = new ArrayList<>();
+		List<Edge> edges = new ArrayList<>();
+
+		Vertex cityMAD = new Vertex("MAD", "Madrid");
+		nodes.add(cityMAD);
+		Vertex cityBCN = new Vertex("BCN", "Barcelona");
+		nodes.add(cityBCN);
+		Vertex cityPAR = new Vertex("PAR", "Paris");
+		nodes.add(cityPAR);
+		Vertex cityZGZ = new Vertex("ZGZ", "Zaragoza");
+		nodes.add(cityZGZ);
+		Vertex cityBIL = new Vertex("BIL", "Bilbao");
+		nodes.add(cityBIL);
+		Vertex cityVAL = new Vertex("VAL", "Valencia");
+		nodes.add(cityVAL);
+		Vertex citySEV = new Vertex("SEV", "Sevilla");
+		nodes.add(citySEV);
+		Vertex cityLIS = new Vertex("LIS", "Lisboa");
+		nodes.add(cityLIS);
+		
+		Edge lanePAR1 = new Edge("lanePAR1", cityPAR, cityBCN, 1);
+		edges.add(lanePAR1);
+		Edge lanePAR2 = new Edge("lanePAR2", cityPAR, cityBIL, 1);
+		edges.add(lanePAR2);
+		
+		Edge laneBCN1 = new Edge("laneBCN1", cityBCN, cityPAR, 1);
+		edges.add(laneBCN1);
+		Edge laneBCN2 = new Edge("laneBCN2", cityBCN, cityZGZ, 1);
+		edges.add(laneBCN2);
+		Edge laneBCN3 = new Edge("laneBCN3", cityBCN, cityVAL, 1);
+		edges.add(laneBCN3);
+		
+		Edge laneZGZ1 = new Edge("laneZGZ1", cityZGZ, cityBCN, 1);
+		edges.add(laneZGZ1);
+		Edge laneZGZ2 = new Edge("laneZGZ2", cityZGZ, cityBIL, 1);
+		edges.add(laneZGZ2);
+		Edge laneZGZ3 = new Edge("laneZGZ3", cityZGZ, cityVAL, 1);
+		edges.add(laneZGZ3);
+		
+		Edge laneBIL1 = new Edge("laneBIL1", cityBIL, cityZGZ, 1);
+		edges.add(laneBIL1);
+		Edge laneBIL2 = new Edge("laneBIL2", cityBIL, citySEV, 1);
+		edges.add(laneBIL2);
+		Edge laneBIL3 = new Edge("laneBIL3", cityBIL, cityPAR, 1);
+		edges.add(laneBIL3);
+		
+		Edge laneVAL1 = new Edge("laneVAL1", cityVAL, cityZGZ, 1);
+		edges.add(laneVAL1);
+		Edge laneVAL2 = new Edge("laneVAL2", cityVAL, citySEV, 1);
+		edges.add(laneVAL2);
+		Edge laneVAL3 = new Edge("laneVAL3", cityVAL, cityBCN, 1);
+		edges.add(laneVAL3);
+		
+		Edge laneMAD1 = new Edge("laneMAD1", cityMAD, citySEV, 1);
+		edges.add(laneMAD1);
+		Edge laneMAD2 = new Edge("laneMAD2", cityMAD, cityLIS, 1);
+		edges.add(laneMAD2);
+		
+		Edge laneLIS1 = new Edge("laneLIS1", cityLIS, citySEV, 1);
+		edges.add(laneLIS1);
+		Edge laneLIS2 = new Edge("laneLIS2", cityLIS, cityMAD, 1);
+		edges.add(laneLIS2);
+		
+		Edge laneSEV1 = new Edge("laneSEV1", citySEV, cityMAD, 1);
+		edges.add(laneSEV1);
+		Edge laneSEV2 = new Edge("laneVAL2", citySEV, cityVAL, 1);
+		edges.add(laneSEV2);
+		Edge laneSEV3 = new Edge("laneVAL3", citySEV, cityLIS, 1);
+		edges.add(laneSEV3);
+		
+
+		// Lets check from location Loc_1 to Loc_10
+		return new Graph(nodes, edges);
+	}
+	
 	public static Graph getGraphFull() {
 
-		List<Vertex> nodes = new ArrayList<Vertex>();
-		List<Edge> edges = new ArrayList<Edge>();
+		List<Vertex> nodes = new ArrayList<>();
+		List<Edge> edges = new ArrayList<>();
 		
 		for (int i = 0; i < 11; i++) {
 			Vertex location = new Vertex("Node_" + i, "Node_" + i);
@@ -126,8 +201,7 @@ public class GraphUtil {
 		addLane(nodes, edges, "Edge_011", 10, 1, 600);
 
 		// Lets check from location Loc_1 to Loc_10
-		Graph graph = new Graph(nodes, edges);
-		return graph;
+		return new Graph(nodes, edges);
 	}
 
 	private static void addLane(List<Vertex> nodes, List<Edge> edges, String laneId, int sourceLocNo, int destLocNo,
