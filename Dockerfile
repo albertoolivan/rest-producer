@@ -11,11 +11,11 @@ VOLUME /tmp
 EXPOSE 8098
 
 # The application's jar file
-ARG JAR_FILE=target/rest.producer-1.0.0-SNAPSHOT.jar
+ARG JAR_FILE=target/rest-producer-1.0.0-SNAPSHOT.jar
 
 # Add the application's jar to the container
-ADD ${JAR_FILE} rest.producer.jar
+ADD ${JAR_FILE} rest-producer.jar
 
 # Run the jar file 
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/rest.producer.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/rest-producer.jar"]
 

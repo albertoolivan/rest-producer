@@ -5,7 +5,7 @@
 https://github.com/albertoolivan/ch.rest.dto.git
 $ mvn install
 
-1) Maven install to get rest.producer-1.0.0-SNAPSHOT.jar
+1) Maven install to get rest-producer-1.0.0-SNAPSHOT.jar
 
 $ mvn install
 
