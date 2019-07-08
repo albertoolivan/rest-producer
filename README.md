@@ -21,8 +21,8 @@ $ docker run -p 8098:8098 rest-producer
 
 http://localhost:8098/city/info/MAD
 http://localhost:8098/city/all
-http://localhost:8098/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
-http://localhost:8098/city/itinerary_less?cityOriginId=MAD&cityDestinationId=BER
+http://localhost:8098/city/itinerary-short?cityOriginId=MAD&cityDestinationId=BER
+http://localhost:8098/city/itinerary-less?cityOriginId=MAD&cityDestinationId=BER
 http://localhost:8098/city-distance?cityOriginId=MAD
 
 user: user_rest

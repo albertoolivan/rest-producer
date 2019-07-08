@@ -85,10 +85,10 @@ public class CityController {
 	}
 
 	/**
-	 * GET /city/itinerary_short
+	 * GET /city/itinerary-short
 	 * 
 	 * Example:
-	 * http://localhost:8098/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
+	 * http://localhost:8098/city/itinerary-short?cityOriginId=MAD&cityDestinationId=BER
 	 * 
 	 * Get IntineraryDTO info from calculating short distance path
 	 * 
@@ -96,7 +96,7 @@ public class CityController {
 	 * @param cityDestinationId
 	 * @return IntineraryDTO
 	 */
-	@RequestMapping(value = "/city/itinerary_short", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/city/itinerary-short", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> itineraryShort(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
 			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId) {
 		try {
@@ -119,10 +119,10 @@ public class CityController {
 	}
 
 	/**
-	 * GET /city/itinerary_less
+	 * GET /city/itinerary-less
 	 * 
 	 * Example:
-	 * http://localhost:8098/city/itinerary_less?cityOriginId=MAD&cityDestinationId=BER
+	 * http://localhost:8098/city/itinerary-less?cityOriginId=MAD&cityDestinationId=BER
 	 * 
 	 * Get IntineraryDTO info from calculating less steps path
 	 * 
@@ -130,7 +130,7 @@ public class CityController {
 	 * @param cityDestinationId
 	 * @return IntineraryDTO
 	 */
-	@RequestMapping(value = "/city/itinerary_less", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/city/itinerary-less", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> itineraryLess(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
 			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId) {
 		try {
