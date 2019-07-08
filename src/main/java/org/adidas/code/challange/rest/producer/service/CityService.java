@@ -1,5 +1,6 @@
 package org.adidas.code.challange.rest.producer.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -8,8 +9,8 @@ import org.adidas.code.challange.rest.dto.CityDTO;
 import org.adidas.code.challange.rest.dto.IntineraryDTO;
 import org.adidas.code.challange.rest.producer.entities.City;
 import org.adidas.code.challange.rest.producer.entities.CityDistance;
-import org.adidas.code.challange.rest.producer.exception.RestProducerException;
 import org.adidas.code.challange.rest.producer.graph.DijkstraAlgorithm;
+import org.adidas.code.challange.rest.producer.graph.Graph;
 import org.adidas.code.challange.rest.producer.graph.Vertex;
 import org.adidas.code.challange.rest.producer.repositories.CityDistanceRepository;
 import org.adidas.code.challange.rest.producer.repositories.CityRepository;
@@ -33,6 +34,7 @@ public class CityService {
 
 	/**
 	 * Find in database a City from id and return a CityDTO.
+	 * Include CityDistance info.
 	 * 
 	 * @param id
 	 * @return CityDTO
@@ -43,7 +45,6 @@ public class CityService {
 		if (cityOptional.isPresent()) {
 			City city = cityOptional.get();
 			List<CityDistance> cityDistanceList = cityDistanceRepository.findByCityOriginId(city.getId());
-			System.out.println("cityDistanceList: " + cityDistanceList);
 			cityDTO = new CityDTO(city.getId(), city.getName(),
 					cityDistanceService.convertCityDistanceList(cityDistanceList));
 		}
@@ -51,7 +52,22 @@ public class CityService {
 	}
 
 	/**
-	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with short number of kilometers.
+	 * Load all City in List<CityDTO>
+	 * 
+	 * @param id
+	 * @return List<CityDTO>
+	 */
+	public List<CityDTO> getCityAll() {
+		List<CityDTO> cityDTOList = new ArrayList<>();
+		Iterable<City> cityIterable = cityRepository.findAll();
+		for (City city : cityIterable) {
+			cityDTOList.add(new CityDTO(city.getId(), city.getName()));
+		}
+		return cityDTOList;
+	}
+	
+	/**
+	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with short distance of kilometers.
 	 * 
 	 * Call DijkstraAlgorithm.
 	 * 
@@ -59,22 +75,49 @@ public class CityService {
 	 * @param cityDestinationId
 	 * @return IntineraryDTO
 	 */
-	public IntineraryDTO getItineraryShort(String cityOriginId, String cityDestinationId) {
+	public IntineraryDTO getItineraryShortDistance(String cityOriginId, String cityDestinationId) {
+		return getItinerary(cityOriginId, cityDestinationId, graphService.getGraphShortDistance());
+	}
+	
+	/**
+	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with less steps.
+	 * 
+	 * Call DijkstraAlgorithm.
+	 * 
+	 * @param cityOriginId
+	 * @param cityDestinationId
+	 * @return IntineraryDTO
+	 */
+	public IntineraryDTO getItineraryLessSteps(String cityOriginId, String cityDestinationId) {
+		return getItinerary(cityOriginId, cityDestinationId, graphService.getGraphLessSteps());
+	}
+	
+	/**
+	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with graph loaded.
+	 * 
+	 * @param cityOriginId
+	 * @param cityDestinationId
+	 * @param graph
+	 * @return IntineraryDTO
+	 */
+	private IntineraryDTO getItinerary(String cityOriginId, String cityDestinationId, Graph graph) {
 		IntineraryDTO intineraryDTO = new IntineraryDTO();
 
 		CityDTO cityOrigin = getCity(cityOriginId);
 		if (cityOrigin == null) {
-			throw new RestProducerException("CityOriginId " + cityOriginId + " not found!");
+			intineraryDTO.setMessage("CityOriginId " + cityOriginId + " not found, see valid cities in /city/all");
+			return intineraryDTO;
 		}
 		CityDTO cityDestinaton = getCity(cityDestinationId);
 		if (cityDestinaton == null) {
-			throw new RestProducerException("CityDestinationId " + cityDestinationId + " not found!");
+			intineraryDTO.setMessage("CityDestinationId " + cityDestinationId + " not found, see valid cities in /city/all");
+			return intineraryDTO;
 		}
 
 		Vertex vertexOrigin = new Vertex(cityOrigin.getId(), cityOrigin.getName());
 		Vertex vertexDFestination = new Vertex(cityDestinaton.getId(), cityDestinaton.getName());
 
-		DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graphService.getGraph());
+		DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graph);
 		dijkstra.execute(vertexOrigin);
 		LinkedList<Vertex> path = dijkstra.getPath(vertexDFestination);
 		int sumPathWeight = dijkstra.sumPathWeight(path);

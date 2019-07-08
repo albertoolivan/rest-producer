@@ -20,7 +20,9 @@ $ docker run -p 8098:8098 rest-producer
 4) Test in browser (need service-registry up)
 
 http://localhost:8098/city/info/MAD
+http://localhost:8098/city/all
 http://localhost:8098/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
+http://localhost:8098/city/itinerary_less?cityOriginId=MAD&cityDestinationId=BER
 http://localhost:8098/city-distance?cityOriginId=MAD
 
 user: user_rest

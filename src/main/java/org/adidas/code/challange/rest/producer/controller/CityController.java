@@ -1,5 +1,7 @@
 package org.adidas.code.challange.rest.producer.controller;
 
+import java.util.List;
+
 import org.adidas.code.challange.rest.dto.CityDTO;
 import org.adidas.code.challange.rest.dto.ExceptionResponseDTO;
 import org.adidas.code.challange.rest.dto.IntineraryDTO;
@@ -34,7 +36,7 @@ public class CityController {
 	 * Get City info
 	 * 
 	 * @param id
-	 * @return City
+	 * @return CityDTO
 	 */
 	@RequestMapping(value = "/city/info/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getCityInfo(@PathVariable String id) {
@@ -57,26 +59,86 @@ public class CityController {
 	}
 
 	/**
+	 * GET /city/all
+	 * 
+	 * Example: http://localhost:8098/city/all
+	 * 
+	 * Get all Cities info
+	 * 
+	 * @param id
+	 * @return List<CityDTO>
+	 */
+	@RequestMapping(value = "/city/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getCityAll() {
+		try {
+			logger.info("Rest getCityAll() called");
+
+			List<CityDTO> cityDTOList = cityService.getCityAll();
+
+			logger.info("Rest getCityAll() Return {}", cityDTOList.size());
+
+			return ResponseEntity.ok().body(cityDTOList);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ExceptionResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
 	 * GET /city/itinerary_short
 	 * 
 	 * Example:
 	 * http://localhost:8098/city/itinerary_short?cityOriginId=MAD&cityDestinationId=BER
 	 * 
-	 * Get IntineraryDTO info
+	 * Get IntineraryDTO info from calculating short distance path
 	 * 
 	 * @param cityOriginId
 	 * @param cityDestinationId
 	 * @return IntineraryDTO
 	 */
 	@RequestMapping(value = "/city/itinerary_short", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> initneraryShort(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
+	public ResponseEntity<?> itineraryShort(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
 			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId) {
 		try {
-			logger.info("Rest getCityInfo() called with cityOriginId {} cityOriginId {}", cityOriginId, cityOriginId);
+			logger.info("Rest itineraryShort() called with cityOriginId {} cityOriginId {}", cityOriginId,
+					cityOriginId);
 
-			IntineraryDTO result = cityService.getItineraryShort(cityOriginId, cityDestinationId);
+			IntineraryDTO result = cityService.getItineraryShortDistance(cityOriginId, cityDestinationId);
 
-			logger.info("Rest getCityInfo() Return {}", result);
+			logger.info("Rest itineraryShort() Return {}", result);
+
+			if (result != null) {
+				return ResponseEntity.ok().body(result);
+			} else {
+				return ResponseEntity.notFound().build();
+			}
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ExceptionResponseDTO(e), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
+	 * GET /city/itinerary_less
+	 * 
+	 * Example:
+	 * http://localhost:8098/city/itinerary_less?cityOriginId=MAD&cityDestinationId=BER
+	 * 
+	 * Get IntineraryDTO info from calculating less steps path
+	 * 
+	 * @param cityOriginId
+	 * @param cityDestinationId
+	 * @return IntineraryDTO
+	 */
+	@RequestMapping(value = "/city/itinerary_less", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> itineraryLess(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
+			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId) {
+		try {
+			logger.info("Rest itineraryLess() called with cityOriginId {} cityOriginId {}", cityOriginId, cityOriginId);
+
+			IntineraryDTO result = cityService.getItineraryLessSteps(cityOriginId, cityDestinationId);
+
+			logger.info("Rest itineraryLess() Return {}", result);
 
 			if (result != null) {
 				return ResponseEntity.ok().body(result);
