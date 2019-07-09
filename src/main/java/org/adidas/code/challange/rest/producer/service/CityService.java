@@ -103,6 +103,10 @@ public class CityService {
 	private IntineraryDTO getItinerary(String cityOriginId, String cityDestinationId, Graph graph) {
 		IntineraryDTO intineraryDTO = new IntineraryDTO();
 
+		if (cityOriginId.equals(cityDestinationId)) {
+			intineraryDTO.setMessage("CityOriginId " + cityOriginId + " and CityDestinationId " + cityDestinationId + " are same city, please choose other destination.");
+			return intineraryDTO;
+		}
 		CityDTO cityOrigin = getCity(cityOriginId);
 		if (cityOrigin == null) {
 			intineraryDTO.setMessage("CityOriginId " + cityOriginId + " not found, see valid cities in /city/all");
@@ -115,11 +119,11 @@ public class CityService {
 		}
 
 		Vertex vertexOrigin = new Vertex(cityOrigin.getId(), cityOrigin.getName());
-		Vertex vertexDFestination = new Vertex(cityDestinaton.getId(), cityDestinaton.getName());
-
+		Vertex vertexDestination = new Vertex(cityDestinaton.getId(), cityDestinaton.getName());
+		
 		DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graph);
 		dijkstra.execute(vertexOrigin);
-		LinkedList<Vertex> path = dijkstra.getPath(vertexDFestination);
+		LinkedList<Vertex> path = dijkstra.getPath(vertexDestination);
 		int sumPathWeight = dijkstra.sumPathWeight(path);
 
 		LinkedList<CityDTO> pathDTO = new LinkedList<>();
