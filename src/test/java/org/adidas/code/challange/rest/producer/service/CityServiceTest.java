@@ -2,6 +2,7 @@ package org.adidas.code.challange.rest.producer.service;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -99,7 +100,7 @@ public class CityServiceTest {
 				.thenReturn(getCityDistanceList2());
 		Mockito.when(graphService.getGraphShortDistance()).thenReturn(GraphServiceTest.getGraphShort());
 		// test
-		IntineraryDTO intineraryDTO = cityService.getItineraryShortDistance("MAD", "PAR");
+		IntineraryDTO intineraryDTO = cityService.getItineraryShortDistance("MAD", "PAR", LocalDateTime.of(2019, 7, 10, 01, 30));
 		logger.info("Test - getItineraryShortTest: " + intineraryDTO);
 		assertEquals(intineraryDTOExpected, intineraryDTO);
 	}
@@ -110,7 +111,7 @@ public class CityServiceTest {
 		intineraryDTOExpected.setMessage(
 				"CityOriginId MAD and CityDestinationId MAD are same city, please choose other destination.");
 		// test
-		IntineraryDTO intineraryDTO = cityService.getItineraryShortDistance("MAD", "MAD");
+		IntineraryDTO intineraryDTO = cityService.getItineraryShortDistance("MAD", "MAD", LocalDateTime.of(2019, 7, 10, 01, 30));
 		logger.info("Test - getItineraryShortTest2: " + intineraryDTO);
 		assertEquals(intineraryDTOExpected, intineraryDTO);
 	}
@@ -130,7 +131,7 @@ public class CityServiceTest {
 				.thenReturn(getCityDistanceList2());
 		Mockito.when(graphService.getGraphLessSteps()).thenReturn(GraphServiceTest.getGraphLess());
 		// test
-		IntineraryDTO intineraryDTO = cityService.getItineraryLessSteps("MAD", "PAR");
+		IntineraryDTO intineraryDTO = cityService.getItineraryLessSteps("MAD", "PAR", LocalDateTime.of(2019, 7, 10, 01, 30));
 		logger.info("Test - getItineraryLessTest: " + intineraryDTO);
 		assertEquals(intineraryDTOExpected, intineraryDTO);
 	}

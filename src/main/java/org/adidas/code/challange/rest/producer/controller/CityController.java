@@ -1,5 +1,6 @@
 package org.adidas.code.challange.rest.producer.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.adidas.code.challange.rest.dto.CityDTO;
@@ -9,6 +10,7 @@ import org.adidas.code.challange.rest.producer.service.CityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -88,22 +90,24 @@ public class CityController {
 	 * GET /city/itinerary-short
 	 * 
 	 * Example:
-	 * http://localhost:8098/city/itinerary-short?cityOriginId=MAD&cityDestinationId=BER
+	 * http://localhost:8098/city/itinerary-short?cityOriginId=MAD&cityDestinationId=BER&departureTime=2019-07-10T01:30:00.000Z
 	 * 
 	 * Get IntineraryDTO info from calculating short distance path
 	 * 
 	 * @param cityOriginId
 	 * @param cityDestinationId
+	 * @param departureTime
 	 * @return IntineraryDTO
 	 */
 	@RequestMapping(value = "/city/itinerary-short", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> itineraryShort(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
-			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId) {
+			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId,
+			@RequestParam(value = "departureTime", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime) {
 		try {
-			logger.info("Rest itineraryShort() called with cityOriginId {} cityOriginId {}", cityOriginId,
-					cityOriginId);
+			logger.info("Rest itineraryShort() called with cityOriginId {} cityOriginId {} departureTime {}", cityOriginId,
+					cityOriginId, departureTime);
 
-			IntineraryDTO result = cityService.getItineraryShortDistance(cityOriginId, cityDestinationId);
+			IntineraryDTO result = cityService.getItineraryShortDistance(cityOriginId, cityDestinationId, departureTime);
 
 			logger.info("Rest itineraryShort() Return {}", result);
 
@@ -122,21 +126,23 @@ public class CityController {
 	 * GET /city/itinerary-less
 	 * 
 	 * Example:
-	 * http://localhost:8098/city/itinerary-less?cityOriginId=MAD&cityDestinationId=BER
+	 * http://localhost:8098/city/itinerary-less?cityOriginId=MAD&cityDestinationId=BER&departureTime=2019-07-10T01:30:00.000Z
 	 * 
 	 * Get IntineraryDTO info from calculating less steps path
 	 * 
 	 * @param cityOriginId
 	 * @param cityDestinationId
+	 * @param departureTime
 	 * @return IntineraryDTO
 	 */
 	@RequestMapping(value = "/city/itinerary-less", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> itineraryLess(@RequestParam(value = "cityOriginId", required = true) String cityOriginId,
-			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId) {
+			@RequestParam(value = "cityDestinationId", required = true) String cityDestinationId,
+			@RequestParam(value = "departureTime", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureTime) {
 		try {
-			logger.info("Rest itineraryLess() called with cityOriginId {} cityOriginId {}", cityOriginId, cityOriginId);
+			logger.info("Rest itineraryLess() called with cityOriginId {} cityOriginId {} departureTime {}", cityOriginId, cityOriginId, departureTime);
 
-			IntineraryDTO result = cityService.getItineraryLessSteps(cityOriginId, cityDestinationId);
+			IntineraryDTO result = cityService.getItineraryLessSteps(cityOriginId, cityDestinationId, departureTime);
 
 			logger.info("Rest itineraryLess() Return {}", result);
 

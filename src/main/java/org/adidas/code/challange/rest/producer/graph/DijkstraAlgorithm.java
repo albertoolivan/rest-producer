@@ -168,5 +168,26 @@ public class DijkstraAlgorithm {
 		
 		return sumWeight;
 	}
+	
+	public LinkedList<Edge> getEdgeFromPath(LinkedList<Vertex> path) {
+		LinkedList<Edge> edgePath = new LinkedList<>();
+		for (int i = 0; i<path.size()-1; i++) {
+			Vertex current = path.get(i);
+			Vertex next = path.get(i+1);
+			if (next != null) {
+				for (Edge edge : edges) {
+					if (edge.getSource().equals(current) && edge.getDestination().equals(next)) {
+						logger.debug("Edge used: " + edge.toString());
+						edgePath.add(edge);
+					}
+				}
+			} else {
+				logger.warn("step null!");
+			}
+		}
+		logger.info("edgePath result: " + edgePath);
+		
+		return edgePath;
+	}
 
 }
