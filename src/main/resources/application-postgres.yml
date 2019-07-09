@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ${springboot.app.name:rest-producer}
+  security:
+    rest:
+      user: user_rest
+      password: '{noop}paSs123_w0rd'
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${db.host:localhost}:5432/postgres?createDatabaseIfNotExist=true
+    username: ${postgres.user:postgtes}
+    password: ${postgres.password:example}
+  jpa:
+    hibernate:
+      ddl-auto: create
+server:
+  port: 8098
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${registry.host:localhost}:8761/eureka/

@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -78,7 +77,13 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
+		<!-- postgresql database -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+
 		<!-- swagger rest doc -->
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -101,9 +106,18 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>postgres</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
-		
+
 			<!-- create jar -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -116,33 +130,31 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			<!-- jacoco test coverage report 
-			/target/site/jacoco/index.html
-			-->
-		    <plugin>
-		      	<groupId>org.jacoco</groupId>
-		      	<artifactId>jacoco-maven-plugin</artifactId>
-		      	<version>0.8.2</version>
-		      	<configuration>
-		        	<append>true</append>
-		     	 </configuration>
-		      	<executions>
-		        	<execution>
-		          		<goals>
-		           			<goal>prepare-agent</goal>
-		          		</goals>
-		        	</execution>
-		        <execution>
-		          	<id>post-unit-test</id>
-		          	<phase>test</phase>
-		          	<goals>
-		            	<goal>report</goal>
-		          	</goals>
-		        </execution>
-		      </executions>
-		    </plugin>
-			
+
+			<!-- jacoco test coverage report /target/site/jacoco/index.html -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.2</version>
+				<configuration>
+					<append>true</append>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
