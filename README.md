@@ -1,4 +1,4 @@
-# ch.rest.producer
+# rest-producer
 
 0) Pre requirement - install rest.dto-1.0.0-SNAPSHOT.jar 
 
