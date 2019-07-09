@@ -52,12 +52,12 @@ public class DataStarter implements CommandLineRunner {
 				mapCityLoaded.put(line.get(0), city);
 				cityRepository.save(city);
 				countCityInserted++;
-				logger.debug("Save city: " + city.toString());
+				logger.debug("Save city: {}", city);
 			} else {
-				logger.warn("Line need 2 parts: " + line);
+				logger.warn("Line need 2 parts: {}", line);
 			}
 		}
-		logger.info("Cities inserted: " + countCityInserted + " of " + countCityLine + " lines.");
+		logger.info("Cities inserted: {} of {} lines.", countCityInserted, countCityLine);
 
 		int countDistancesInserted = 0;
 		int countDistanceLines = 0;
@@ -77,15 +77,15 @@ public class DataStarter implements CommandLineRunner {
 					cityDistanceRepository.save(cityDistance);
 					countDistancesInserted++;
 				} else {
-					logger.warn("City id not exists! cityOriginId: " + cityOriginId + " cityDestinationId: "
-							+ cityDestinationId);
+					logger.warn("City id not exists! cityOriginId: {} cityDestinationId: {}",
+							cityOriginId, cityDestinationId);
 				}
 
 			} else {
-				logger.warn("Line need 4 parts: " + line);
+				logger.warn("Line need 4 parts: {}", line);
 			}
 		}
-		logger.info("Distances inserted " + countDistancesInserted + " of " + countDistanceLines + " lines ");
+		logger.info("Distances inserted {} of {} lines ", countDistancesInserted, countDistanceLines);
 	}
 
 	/**
@@ -106,17 +106,15 @@ public class DataStarter implements CommandLineRunner {
 			while ((line = br.readLine()) != null) {
 				if (line.startsWith("#") || !line.contains(COMMA_DELIMITER)) {
 					// ignore comment/empty line
-					continue;
 				} else {
 					// clean "
 					line = line.replace("\"", "");
 					String[] values = line.split(COMMA_DELIMITER);
 					records.add(Arrays.asList(values));
 				}
-
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return records;
 	}

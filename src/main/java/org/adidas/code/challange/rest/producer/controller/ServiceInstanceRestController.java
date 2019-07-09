@@ -15,6 +15,16 @@ public class ServiceInstanceRestController {
 	@Autowired
 	private DiscoveryClient discoveryClient;
 
+	/**
+	 * GET /service-instances/{applicationName}
+	 * 
+	 * Example: http://localhost:8082 /service-instances/rest-producer
+	 * 
+	 * Get ServiStringceInstance from eureka server
+	 * 
+	 * @param applicationName
+	 * @return List<ServiStringceInstance>
+	 */
 	@RequestMapping("/service-instances/{applicationName}")
 	public List<ServiceInstance> serviceInstancesByApplicationName(@PathVariable String applicationName) {
 		return this.discoveryClient.getInstances(applicationName);
