@@ -72,7 +72,7 @@ public class AppProducerTest {
 
 		logger.info("Response: {}", response.getBody());
 		then(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		// fails, check it
+		// fails because conflicts with spring-security, check it
 		// then(response.getBody()).contains("rest-producer");
 	}
 
