@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import org.adidas.code.challange.rest.dto.ArrivalTimeDTO;
 import org.adidas.code.challange.rest.dto.CityDTO;
 import org.adidas.code.challange.rest.dto.IntineraryDTO;
 import org.adidas.code.challange.rest.producer.entities.City;
@@ -29,7 +30,7 @@ public class CityService {
 	// vehicle speed get from application.yml
 	// default is 120 (car)
 	@Value("${vehicle.speed:120}")
-	private int vehicleSpeed;
+	private int vehicleSpeed = 120;
 
 	@Autowired
 	CityRepository cityRepository;
@@ -44,8 +45,8 @@ public class CityService {
 	CityDistanceService cityDistanceService;
 
 	/**
-	 * Find in database a City from id and return a CityDTO. Include
-	 * CityDistance info.
+	 * Find in database a City from id and return a CityDTO. Include CityDistance
+	 * info.
 	 * 
 	 * @param id
 	 * @return CityDTO
@@ -90,15 +91,11 @@ public class CityService {
 	 */
 	public IntineraryDTO getItineraryShortDistance(String cityOriginId, String cityDestinationId,
 			LocalDateTime departureTime) {
-		IntineraryDTO intineraryDTO = getItinerary(cityOriginId, cityDestinationId, departureTime,
-				graphService.getGraphShortDistance());
-		intineraryDTO.setArrivalTime(calculateArrivalTime(departureTime, intineraryDTO.getSumPathWeight(), vehicleSpeed));
-		return intineraryDTO;
+		return getItinerary(cityOriginId, cityDestinationId, departureTime, graphService.getGraphShortDistance());
 	}
 
 	/**
-	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with less
-	 * steps.
+	 * Get a IntineraryDTO from cityOriginId and cityDestinationId with less steps.
 	 * 
 	 * Call DijkstraAlgorithm.
 	 * 
@@ -109,60 +106,7 @@ public class CityService {
 	 */
 	public IntineraryDTO getItineraryLessSteps(String cityOriginId, String cityDestinationId,
 			LocalDateTime departureTime) {
-		IntineraryDTO intineraryDTO = getItinerary(cityOriginId, cityDestinationId, departureTime,
-				graphService.getGraphLessSteps());
-		// lessSteps algorithm use weight=1 to get path but no real distance
-		int distanceKm = calculateRealDistance(intineraryDTO.getPath());
-		intineraryDTO.setSumPathWeight(distanceKm);
-		intineraryDTO.setArrivalTime(calculateArrivalTime(departureTime, distanceKm, vehicleSpeed));
-		return intineraryDTO;
-	}
-
-	/**
-	 * Calculate real distance from graphs of less steps.
-	 * 
-	 * @param cityDTOPath
-	 * @return int
-	 */
-	public int calculateRealDistance(List<CityDTO> cityDTOPath) {
-		int realDistance = 0;
-		DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graphService.getGraphShortDistance());
-		LinkedList<Vertex> vertexPath = new LinkedList<>();
-		for (CityDTO cityDTO : cityDTOPath) {
-			vertexPath.add(new Vertex(cityDTO.getId(), cityDTO.getName()));
-		}
-		realDistance = dijkstra.sumPathWeight(vertexPath);
-		return realDistance;
-	}
-
-	/**
-	 * Calculate arrival time with departure time, distance(km) and speed(km/h)
-	 * 
-	 * @param departureTime
-	 * @param distanceKm
-	 * @param speed
-	 * @return LocalDateTime
-	 */
-	public LocalDateTime calculateArrivalTime(LocalDateTime departureTime, int distanceKm, int speed) {
-		logger.info("Calculate arrivalTime from departureTime {}, distance {} and speed {}", departureTime, distanceKm,
-				speed);
-		LocalDateTime arrivalTime = departureTime;
-		// time(h) = space(km) / speed(km/h)
-		double duration = (double) distanceKm / (double) speed;
-		// get hour by trunk float
-		int durationHours = (int) duration;
-		// get minute by last 2 decimals
-		duration = duration - durationHours;
-		duration = duration * 100;
-		// trunk again to get minutes/base100
-		int durationMinutes = (int) duration;
-		// convert base/100 into minutes base/60
-		durationMinutes = (durationMinutes * 60) / 100;
-		// add hours and minutes from departure time
-		arrivalTime = arrivalTime.plusHours(durationHours);
-		arrivalTime = arrivalTime.plusMinutes(durationMinutes);
-		logger.info("Duration {}:{} -> arrivalTime {} ", durationHours, durationMinutes, arrivalTime);
-		return arrivalTime;
+		return getItinerary(cityOriginId, cityDestinationId, departureTime, graphService.getGraphLessSteps());
 	}
 
 	/**
@@ -202,18 +146,80 @@ public class CityService {
 		DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graph);
 		dijkstra.execute(vertexOrigin);
 		LinkedList<Vertex> path = dijkstra.getPath(vertexDestination);
-		int sumPathWeight = dijkstra.sumPathWeight(path);
 
 		LinkedList<CityDTO> pathDTO = new LinkedList<>();
 		for (Vertex vertex : path) {
 			pathDTO.add(new CityDTO(vertex.getId(), vertex.getName()));
 		}
 		intineraryDTO.setPath(pathDTO);
-		intineraryDTO.setSumPathWeight(sumPathWeight);
 		intineraryDTO.setDepartureTime(departureTime);
+
+		// lessSteps algorithm use weight=1 to get path but no real distance
+		int distanceKm = calculateRealPathDistance(path);
+		intineraryDTO.setSumPathWeight(distanceKm);
+		ArrivalTimeDTO arrivalTimeDTO = calculateArrivalTime(departureTime, distanceKm, vehicleSpeed);
+		intineraryDTO.setDurationTime(arrivalTimeDTO.getDurationTime());
+		intineraryDTO.setArrivalTime(arrivalTimeDTO.getArrivalTime());
 		intineraryDTO.setMessage("Itinerary found successfull.");
 
 		return intineraryDTO;
+	}
+
+	/**
+	 * Calculate arrival time with departure time, distance(km) and speed(km/h)
+	 * 
+	 * @param departureTime
+	 * @param distanceKm
+	 * @param speed
+	 * @return LocalDateTime
+	 */
+	public ArrivalTimeDTO calculateArrivalTime(LocalDateTime departureTime, int distanceKm, int speed) {
+		logger.info("Calculate arrivalTime from departureTime {}, distance {} and speed {}", departureTime, distanceKm,
+				speed);
+		ArrivalTimeDTO arrivalTimeDTO = new ArrivalTimeDTO();
+		LocalDateTime arrivalTime = departureTime;
+		if (departureTime != null && distanceKm > 0 && speed > 0) {
+			// time(h) = space(km) / speed(km/h)
+			double duration = (double) distanceKm / (double) speed;
+			// get hour by trunk float
+			int durationHours = (int) duration;
+			// get minute by last 2 decimals
+			duration = duration - durationHours;
+			duration = duration * 100;
+			// trunk again to get minutes/base100
+			int durationMinutes = (int) duration;
+			// convert base/100 into minutes base/60
+			durationMinutes = (durationMinutes * 60) / 100;
+			// add hours and minutes from departure time
+			arrivalTime = arrivalTime.plusHours(durationHours);
+			arrivalTime = arrivalTime.plusMinutes(durationMinutes);
+			// convert to string and format "4:9" into "04:09" HH:mm
+			String durationMinutesString = String.valueOf(durationMinutes);
+			if (durationMinutes < 10) {
+				durationMinutesString = "0" + durationMinutesString;
+			}
+			String durationHoursString = String.valueOf(durationHours);
+			if (durationHours < 10) {
+				durationHoursString = "0" + durationHoursString;
+			}
+			logger.info("Duration {}:{} -> arrivalTime {} ", durationHoursString, durationMinutesString, arrivalTime);
+			arrivalTimeDTO.setArrivalTime(arrivalTime);
+			arrivalTimeDTO.setDurationTime(durationHoursString + ":" + durationMinutesString);
+		}
+		return arrivalTimeDTO;
+	}
+
+	/**
+	 * Calculate real distance from graphs of less steps.
+	 * 
+	 * @param cityDTOPath
+	 * @return int
+	 */
+	public int calculateRealPathDistance(LinkedList<Vertex> path) {
+		int realDistance = 0;
+		DijkstraAlgorithm dijkstra = new DijkstraAlgorithm(graphService.getGraphShortDistance());
+		realDistance = dijkstra.sumPathWeight(path);
+		return realDistance;
 	}
 
 }
