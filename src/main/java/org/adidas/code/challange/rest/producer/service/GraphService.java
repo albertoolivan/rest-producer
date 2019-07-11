@@ -98,5 +98,11 @@ public class GraphService {
 		}
 		return new Graph(nodes, edges);
 	}
+	
+	public String resetGraph() {
+		graphShortDistance = null;
+		graphLessSteps = null;
+		return "Reset graphs...";
+	}
 
 }
