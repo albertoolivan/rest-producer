@@ -40,52 +40,59 @@ public class DataStarter implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Map<String, City> mapCityLoaded = new HashMap<>();
+		if (cityRepository.count() == 0) {
 
-		int countCityInserted = 0;
-		int countCityLine = 0;
-		List<List<String>> cityList = readFile("city_list.txt");
-		for (List<String> line : cityList) {
-			countCityLine++;
-			if (line.size() >= 2) {
-				City city = new City(line.get(0), line.get(1));
-				mapCityLoaded.put(line.get(0), city);
-				cityRepository.save(city);
-				countCityInserted++;
-				logger.debug("Save city: {}", city);
-			} else {
-				logger.warn("Line need 2 parts: {}", line);
-			}
-		}
-		logger.info("Cities inserted: {} of {} lines.", countCityInserted, countCityLine);
+			Map<String, City> mapCityLoaded = new HashMap<>();
 
-		int countDistancesInserted = 0;
-		int countDistanceLines = 0;
-		List<List<String>> cityDistanceList = readFile("city_distance_list.txt");
-		for (List<String> line : cityDistanceList) {
-			countDistanceLines++;
-			if (line.size() >= 4) {
-				String id = line.get(0);
-				String cityOriginId = line.get(1);
-				String cityDestinationId = line.get(2);
-				String distanceKmString = line.get(3);
-				int distanceKm = Integer.parseInt(distanceKmString);
-				City cityOrigin = mapCityLoaded.get(cityOriginId);
-				City cityDestination = mapCityLoaded.get(cityDestinationId);
-				if (cityOrigin != null && cityDestination != null) {
-					CityDistance cityDistance = new CityDistance(id, cityOrigin, cityDestination, distanceKm);
-					cityDistanceRepository.save(cityDistance);
-					countDistancesInserted++;
+			int countCityInserted = 0;
+			int countCityLine = 0;
+			List<List<String>> cityList = readFile("city_list.txt");
+			for (List<String> line : cityList) {
+				countCityLine++;
+				if (line.size() >= 2) {
+					City city = new City(line.get(0), line.get(1));
+					mapCityLoaded.put(line.get(0), city);
+					cityRepository.save(city);
+					countCityInserted++;
+					logger.debug("Save city: {}", city);
 				} else {
-					logger.warn("City id not exists! cityOriginId: {} cityDestinationId: {}",
-							cityOriginId, cityDestinationId);
+					logger.warn("Line need 2 parts: {}", line);
 				}
-
-			} else {
-				logger.warn("Line need 4 parts: {}", line);
 			}
+			logger.info("Cities inserted: {} of {} lines.", countCityInserted, countCityLine);
+
+			int countDistancesInserted = 0;
+			int countDistanceLines = 0;
+			List<List<String>> cityDistanceList = readFile("city_distance_list.txt");
+			for (List<String> line : cityDistanceList) {
+				countDistanceLines++;
+				if (line.size() >= 4) {
+					String id = line.get(0);
+					String cityOriginId = line.get(1);
+					String cityDestinationId = line.get(2);
+					String distanceKmString = line.get(3);
+					int distanceKm = Integer.parseInt(distanceKmString);
+					City cityOrigin = mapCityLoaded.get(cityOriginId);
+					City cityDestination = mapCityLoaded.get(cityDestinationId);
+					if (cityOrigin != null && cityDestination != null) {
+						CityDistance cityDistance = new CityDistance(id, cityOrigin, cityDestination, distanceKm);
+						cityDistanceRepository.save(cityDistance);
+						countDistancesInserted++;
+					} else {
+						logger.warn("City id not exists! cityOriginId: {} cityDestinationId: {}", cityOriginId,
+								cityDestinationId);
+					}
+
+				} else {
+					logger.warn("Line need 4 parts: {}", line);
+				}
+			}
+			logger.info("Distances inserted {} of {} lines ", countDistancesInserted, countDistanceLines);
+		} else {
+			long countCity = cityRepository.count();
+			long countCityDistance = cityDistanceRepository.count();
+			logger.info("Database already has data city {} cityDistance {}", countCity, countCityDistance);
 		}
-		logger.info("Distances inserted {} of {} lines ", countDistancesInserted, countDistanceLines);
 	}
 
 	/**
